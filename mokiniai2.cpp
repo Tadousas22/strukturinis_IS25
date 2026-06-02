@@ -27,9 +27,10 @@ int main() {
 
             cout << "Kiek pažymių: ";
             cin >> pazymiuKiekis[mokiniuKiekis];
+             
+             cout << "Pažymys: ";
 
             for (int i = 0; i < pazymiuKiekis[mokiniuKiekis]; i++) {
-                cout << "Pažymys: ";
                 cin >> pazymiai[mokiniuKiekis][i];
             }
 
