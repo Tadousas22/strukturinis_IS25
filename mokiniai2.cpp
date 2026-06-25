@@ -13,31 +13,49 @@ int main() {
     int pasirinkimas;
 
     while (true) {
-        cout << "\n1 - Pridėti\n2 - Rodyti visus\n3 - Rodyti vieną\n4 - Keisti pažymį\n5 - Pašalinti\n0 - Išeiti\n";
+        cout << "\n1 - Prideti\n2 - Rodyti visus\n3 - Rodyti viena\n4 - Keisti pazymi\n5 - Pasalinti\n0 - Iseiti\n";
         cin >> pasirinkimas;
 
         if (pasirinkimas == 0) {
             break;
         }
 
-        // PRIDETI
         if (pasirinkimas == 1) {
+            if (mokiniuKiekis >= MAX_MOKINIU) {
+                cout << "Maksimalus mokiniu skaicius pasiektas!\n";
+                continue;
+            }
+
             cout << "Vardas: ";
             cin >> vardai[mokiniuKiekis];
 
-            cout << "Kiek pažymių: ";
-            cin >> pazymiuKiekis[mokiniuKiekis];
-             
-             cout << "Pažymys: ";
+            do {
+                cout << "Kiek pazymiu (1-10): ";
+                cin >> pazymiuKiekis[mokiniuKiekis];
+
+                if (pazymiuKiekis[mokiniuKiekis] < 1 ||
+                    pazymiuKiekis[mokiniuKiekis] > MAX_PAZYMIU) {
+                    cout << "Klaida! Galima ivesti nuo 1 iki 10 pazymiu.\n";
+                }
+            } while (pazymiuKiekis[mokiniuKiekis] < 1 ||
+                     pazymiuKiekis[mokiniuKiekis] > MAX_PAZYMIU);
 
             for (int i = 0; i < pazymiuKiekis[mokiniuKiekis]; i++) {
-                cin >> pazymiai[mokiniuKiekis][i];
+                do {
+                    cout << "Iveskite " << i + 1 << "-aji pazymi (1-10): ";
+                    cin >> pazymiai[mokiniuKiekis][i];
+
+                    if (pazymiai[mokiniuKiekis][i] < 1 ||
+                        pazymiai[mokiniuKiekis][i] > 10) {
+                        cout << "Klaida! Pazymys turi buti nuo 1 iki 10.\n";
+                    }
+                } while (pazymiai[mokiniuKiekis][i] < 1 ||
+                         pazymiai[mokiniuKiekis][i] > 10);
             }
 
             mokiniuKiekis++;
         }
 
-        // RODYTI VISUS
         if (pasirinkimas == 2) {
             for (int i = 0; i < mokiniuKiekis; i++) {
                 cout << vardai[i] << ": ";
@@ -48,11 +66,12 @@ int main() {
             }
         }
 
-        // RODYTI VIENA
         if (pasirinkimas == 3) {
             string vardas;
-            cout << "Įvesk vardą: ";
+            cout << "Ivesk varda: ";
             cin >> vardas;
+
+            bool rastas = false;
 
             for (int i = 0; i < mokiniuKiekis; i++) {
                 if (vardai[i] == vardas) {
@@ -61,36 +80,64 @@ int main() {
                         cout << pazymiai[i][j] << " ";
                     }
                     cout << endl;
+                    rastas = true;
                 }
+            }
+
+            if (!rastas) {
+                cout << "Mokinys nerastas.\n";
             }
         }
 
-        // KEISTI PAZYMI
         if (pasirinkimas == 4) {
             string vardas;
-            cout << "Įvesk vardą: ";
+            cout << "Ivesk varda: ";
             cin >> vardas;
+
+            bool rastas = false;
 
             for (int i = 0; i < mokiniuKiekis; i++) {
                 if (vardai[i] == vardas) {
+                    rastas = true;
+
                     int nr;
-                    cout << "Kelintas pažymys: ";
+                    cout << "Kelintas pazymys: ";
                     cin >> nr;
 
-                    cout << "Naujas pažymys: ";
-                    cin >> pazymiai[i][nr - 1];
+                    if (nr < 1 || nr > pazymiuKiekis[i]) {
+                        cout << "Neteisingas pazymio numeris!\n";
+                        break;
+                    }
+
+                    do {
+                        cout << "Naujas pazymys (1-10): ";
+                        cin >> pazymiai[i][nr - 1];
+
+                        if (pazymiai[i][nr - 1] < 1 ||
+                            pazymiai[i][nr - 1] > 10) {
+                            cout << "Klaida! Pazymys turi buti nuo 1 iki 10.\n";
+                        }
+                    } while (pazymiai[i][nr - 1] < 1 ||
+                             pazymiai[i][nr - 1] > 10);
                 }
+            }
+
+            if (!rastas) {
+                cout << "Mokinys nerastas.\n";
             }
         }
 
-        // PASALINTI
         if (pasirinkimas == 5) {
             string vardas;
-            cout << "Įvesk vardą: ";
+            cout << "Ivesk varda: ";
             cin >> vardas;
+
+            bool rastas = false;
 
             for (int i = 0; i < mokiniuKiekis; i++) {
                 if (vardai[i] == vardas) {
+                    rastas = true;
+
                     for (int j = i; j < mokiniuKiekis - 1; j++) {
                         vardai[j] = vardai[j + 1];
                         pazymiuKiekis[j] = pazymiuKiekis[j + 1];
@@ -99,8 +146,15 @@ int main() {
                             pazymiai[j][k] = pazymiai[j + 1][k];
                         }
                     }
+
                     mokiniuKiekis--;
+                    cout << "Mokinys pasalintas.\n";
+                    break;
                 }
+            }
+
+            if (!rastas) {
+                cout << "Mokinys nerastas.\n";
             }
         }
     }
